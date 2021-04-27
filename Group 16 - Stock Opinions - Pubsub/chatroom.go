@@ -1,3 +1,4 @@
+//Group 16 - Decentralized Stock Opinions and Ratings - Spring 2021
 package main
 
 import (
@@ -32,7 +33,7 @@ type ChatRoom struct {
 // ChatMessage gets converted to/from JSON and sent in the body of pubsub messages.
 type ChatMessage struct {
 	Message    string
-	Opinion    bool
+	Opinion    bool //Added to differentiate regular messages and opinion JSONs
 	SenderID   string
 	SenderNick string
 }

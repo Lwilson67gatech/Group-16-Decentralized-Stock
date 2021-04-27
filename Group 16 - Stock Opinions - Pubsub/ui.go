@@ -1,3 +1,4 @@
+//Group 16 - Decentralized Stock Opinions and Ratings - Spring 2021
 package main
 
 import (
@@ -28,17 +29,14 @@ type ChatUI struct {
 	doneCh  chan struct{}
 }
 
+//Clay - Added this struct in order to store saved opinion messages
+//PeerID is added in order to differentiate users with the same name
 type OpinionMessage struct {
 	User    string
 	Stock   string
 	Numeric string
 	Opinion string
 	PeerID  string
-}
-
-type Person struct {
-	First string
-	Last  string
 }
 
 var localOpinions []*OpinionMessage // locally stored list of recieved opinions
@@ -91,6 +89,7 @@ func NewChatUI(cr *ChatRoom) *ChatUI {
 			counter := 0
 			total := 0
 			avg := 0.0
+			//Loop through each opinion and take its numerical score
 			for _, op := range localOpinions {
 				totalval, interror := strconv.ParseInt(op.Numeric, 10, 64)
 				if interror != nil {
@@ -101,6 +100,7 @@ func NewChatUI(cr *ChatRoom) *ChatUI {
 				total = total + int(totalval)
 				counter = counter + 1
 			}
+			//Prevents division by 0
 			if counter > 0 && total > 0 {
 				avg = float64(total) / float64(counter)
 			}
@@ -115,11 +115,13 @@ func NewChatUI(cr *ChatRoom) *ChatUI {
 			isOpinionSaved := false
 			prompt := withColor("yellow", fmt.Sprintf("%s", "Listing All Received Opinions:"))
 			fmt.Fprintf(msgBox, "\n%s %s\n", prompt, "")
+			//Loop through each opinion
 			for _, op := range localOpinions {
 				isOpinionSaved = true
 				name := withColor("blue", fmt.Sprintf("%s", op.User+" ("+op.Stock+" Stock Rating = "+op.Numeric+"): "))
 				fmt.Fprintf(msgBox, "%s %s\n", name, op.Opinion)
 			}
+			//Print an error message if none have come in
 			if isOpinionSaved == false {
 				fmt.Fprintf(msgBox, "%s %s\n", "No Opinions have been recieved", "")
 			}
@@ -134,8 +136,9 @@ func NewChatUI(cr *ChatRoom) *ChatUI {
 			if err != nil {
 				panic(err)
 			}
+			//Looks for your matching json file
 			for _, file := range files {
-				if file.Name() == cr.roomName+".txt" {
+				if file.Name() == cr.roomName+".txt" || file.Name() == cr.roomName+".json" {
 					content, err := ioutil.ReadFile(dirPath + file.Name())
 					if err != nil {
 						panic(err)

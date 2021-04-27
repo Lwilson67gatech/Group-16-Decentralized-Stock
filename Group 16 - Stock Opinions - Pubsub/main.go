@@ -1,3 +1,4 @@
+//Group 16 - Decentralized Stock Opinions and Ratings - Spring 2021
 package main
 
 import (
@@ -64,6 +65,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	//Looks through the json files for the name of the subscribed room
 	for _, file := range files {
 		fmt.Println(file.Name())
 		stockFileName = file.Name()
